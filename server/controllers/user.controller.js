@@ -54,10 +54,7 @@ export const login = async (req, res) => {
 
     generateToken(res, user, `Welcome back ${user.name}`);
 
-    return res.status(201).json({
-      success: true,
-      message: "Account created successfully",
-    });
+
   } catch (error) {
     console.error("Error in registration:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });

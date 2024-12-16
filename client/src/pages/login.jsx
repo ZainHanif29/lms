@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "@/features/api/authApi";
+import { toast } from "sonner";
 
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
@@ -19,6 +24,41 @@ const Login = () => {
     password: "",
   });
   const [loginInput, setLoginInput] = useState({ email: "", password: "" });
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
+  
+  useEffect(() => {
+    if (registerIsSuccess && registerData) {
+      toast.success(registerData.message || "Signup Successful");
+    }
+    if (registerError) {
+      toast.error(registerError.data.message || "Signup Failed");
+    }
+
+    if (loginIsSuccess && loginData) {
+      toast.success(loginData.message || "Login Successful");
+    }
+    if (loginError) {
+      toast.error(loginError.data.message || "Login Failed");
+    }
+  }, [registerData, loginData, registerError, loginError]);
+
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
     if (type === "signup") {
@@ -30,12 +70,14 @@ const Login = () => {
   const handleSignup = () => {
     console.log("Signup data:", signupInput);
     // Perform signup logic (e.g., API call)
+    registerUser(signupInput);
     setSignupInput({ name: "", email: "", password: "" }); // Reset form
   };
 
   const handleLogin = () => {
     console.log("Login data:", loginInput);
     // Perform login logic (e.g., API call)
+    loginUser(loginInput);
     setLoginInput({ email: "", password: "" }); // Reset form
   };
   return (
