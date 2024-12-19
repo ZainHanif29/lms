@@ -4,6 +4,7 @@ import "./App.css";
 import Login from "./pages/login";
 import MainLayout from "./Layout/MainLayout";
 import HeroSection from "./pages/student/HeroSection";
+import Courses from "./pages/student/Courses";
 
 const App = () => {
   const appRouter = createBrowserRouter([
@@ -16,6 +17,7 @@ const App = () => {
           element: (
             <>
               <HeroSection />
+              <Courses />
             </>
           ),
         },

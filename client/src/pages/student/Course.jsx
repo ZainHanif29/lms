@@ -1,0 +1,40 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import React from "react";
+
+const Course = () => {
+  return (
+    <Card className="overflow-hidden rounded-lg dark:bg-gray-800 bg-white shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+      <div className="relative">
+        <img
+          src="data:image/jpeg;base64,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"
+          alt="course"
+          className="w-full h-36 object-cover rounded-t-lg"
+        />
+      </div>
+      <CardContent className="px-5 py-4 space-y-3">
+        <h1 className="hover:underline font-bold text-lg truncate">
+          Next.js Complete Course
+        </h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <h1 className="font-medium text-sm">Teacher Name</h1>
+          </div>
+          <Badge className="bg-blue-600 text-white px-2 py-1 text-xs rounded-full">
+            Advanced
+          </Badge>
+        </div>
+        <div className="text-lg font-bold">
+          <span>Rs 499</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default Course;
