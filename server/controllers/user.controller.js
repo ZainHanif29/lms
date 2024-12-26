@@ -25,7 +25,9 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in registration:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error: Register" });
   }
 };
 
@@ -53,10 +55,69 @@ export const login = async (req, res) => {
     }
 
     generateToken(res, user, `Welcome back ${user.name}`);
-
-
   } catch (error) {
-    console.error("Error in registration:", error);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Error in Login:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error: Login" });
+  }
+};
+
+export const logout = async () => {
+  try {
+    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+      message: "Logged out successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in Logout:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error: Logout" });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const userID = req.id;
+    const user = await User.findById({ _id: userID }).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        message: "Profile not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Profile found",
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error("Error in User Profile:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error: User Profile Data",
+    });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.id;
+    const { name } = req.body;
+    const profilePhoto = req.file;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "Profile not found",
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.error("Error in Update Profile:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error: Update Profile Data",
+    });
   }
 };

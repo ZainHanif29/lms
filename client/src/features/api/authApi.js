@@ -32,8 +32,18 @@ export const authApi = createApi({
         }
       },
     }),
+    loadUser: builder.query({
+      query: () => ({
+        url: "profile",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation,useLoginUserMutation } = authApi;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useLoadUserQuery,
+} = authApi;
 export default authApi;
