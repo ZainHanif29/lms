@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu, School } from "lucide-react";
 import { Button } from "./ui/button";
 import DarkMode from "@/DarkMode";
@@ -20,24 +20,39 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogoutUserMutation } from "@/features/api/authApi";
+import { toast } from "sonner";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const { user } = useSelector((store) => store.auth);
+  const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data.message || "User logout.");
+      navigate("/login");
+    }
+  }, [isSuccess]);
+  const logoutHandler = async () => {
+    await logoutUser();
+  };
+
   return (
     <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-b-gray-800 border-b-gray-200 top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop Navbar */}
-      <DesktopNavbar />
+      <DesktopNavbar logoutHandler={logoutHandler} user={user} />
       {/* Mobile Navbar */}
-      <MobileNavbar />
+      <MobileNavbar logoutHandler={logoutHandler} user={user} />
     </div>
   );
 };
 
 export default Navbar;
 
-const DesktopNavbar = () => {
-  const user = true;
-
+const DesktopNavbar = ({ logoutHandler, user }) => {
+  const navigate = useNavigate();
   return (
     <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
       {/* Logo */}
@@ -51,7 +66,9 @@ const DesktopNavbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage
+                  src={user?.photoUrl || "https://github.com/shadcn.png"}
+                />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
@@ -64,15 +81,23 @@ const DesktopNavbar = () => {
               <DropdownMenuItem>
                 <Link to="profile">Edit Profile</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>Log out</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Dashboard</DropdownMenuItem>
+              <DropdownMenuItem onClick={logoutHandler}>
+                Log out
+              </DropdownMenuItem>
+              {user?.role == "instructor" && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <div className="flex items-center gap-2">
-            <Button variant="outline">Login</Button>
-            <Button>Signup</Button>
+            <Button variant="outline" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+            <Button onClick={() => navigate("/login")}>Signup</Button>
           </div>
         )}
         <DarkMode />
@@ -81,9 +106,7 @@ const DesktopNavbar = () => {
   );
 };
 
-const MobileNavbar = () => {
-  const role = "instructor";
-
+const MobileNavbar = ({ logoutHandler, user }) => {
   return (
     <>
       <div className="flex md:hidden items-center justify-between px-4 h-full">
@@ -114,9 +137,9 @@ const MobileNavbar = () => {
               <span>
                 <Link to="profile">Edit Profile</Link>
               </span>
-              <p>Log out</p>
+              <p onClick={logoutHandler}>Log out</p>
             </nav>
-            {role === "instructor" && (
+            {user?.role == "instructor" && (
               <SheetFooter>
                 <SheetClose asChild>
                   <Button className="w-full" type="submit">

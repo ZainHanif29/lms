@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
+import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 
 export const register = async (req, res) => {
   try {
@@ -63,7 +64,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async () => {
+export const logout = async (req, res) => {
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out successfully",
@@ -101,7 +102,7 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-const updateProfile = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
     const userId = req.id;
     const { name } = req.body;
@@ -113,6 +114,23 @@ const updateProfile = async (req, res) => {
         success: false,
       });
     }
+    // extract public ID of the old image from the url is it exits;
+    if (user.photoUrl) {
+      const publicId = user.photoUrl.split("/").pop().split(".")[0]; // public ID
+      deleteMediaFromCloudinary(publicId);
+    }
+    // upload new photo
+    const cloudResponse = await uploadMedia(profilePhoto.path);
+    const photoUrl = cloudResponse.secure_url;
+    const updatedData = { name, photoUrl };
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+    }).select("-password");
+    return res.status(200).json({
+      success: true,
+      user: updatedUser,
+      message: "Profile updated successfully",
+    });
   } catch (error) {
     console.error("Error in Update Profile:", error);
     res.status(500).json({
