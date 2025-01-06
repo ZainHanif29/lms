@@ -4,9 +4,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./database/db.js";
 import userRoute from "./routes/user.route.js";
+import courseRoute from "./routes/course.route.js";
 
 dotenv.config({});
 const app = express();
+
 // Middleware
 app.use(express.json());
 app.use(
@@ -16,8 +18,11 @@ app.use(
   })
 );
 app.use(cookieParser());
+
 // API
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/course", courseRoute);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   connectDB();

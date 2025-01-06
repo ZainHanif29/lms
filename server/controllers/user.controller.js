@@ -26,7 +26,7 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in registration:", error);
-    res
+    return res
       .status(500)
       .json({ success: false, message: "Internal Server Error: Register" });
   }
@@ -58,7 +58,7 @@ export const login = async (req, res) => {
     generateToken(res, user, `Welcome back ${user.name}`);
   } catch (error) {
     console.error("Error in Login:", error);
-    res
+    return res
       .status(500)
       .json({ success: false, message: "Internal Server Error: Login" });
   }
@@ -72,7 +72,7 @@ export const logout = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in Logout:", error);
-    res
+    return res
       .status(500)
       .json({ success: false, message: "Internal Server Error: Logout" });
   }
@@ -95,7 +95,7 @@ export const getUserProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in User Profile:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Internal Server Error: User Profile Data",
     });
@@ -133,7 +133,7 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in Update Profile:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Internal Server Error: Update Profile Data",
     });

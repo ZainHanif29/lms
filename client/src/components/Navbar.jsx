@@ -87,7 +87,9 @@ const DesktopNavbar = ({ logoutHandler, user }) => {
               {user?.role == "instructor" && (
                 <>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link to="admin">Dashboard</Link>
+                  </DropdownMenuItem>
                 </>
               )}
             </DropdownMenuContent>
@@ -142,9 +144,11 @@ const MobileNavbar = ({ logoutHandler, user }) => {
             {user?.role == "instructor" && (
               <SheetFooter>
                 <SheetClose asChild>
-                  <Button className="w-full" type="submit">
-                    DashBoard
-                  </Button>
+                  <Link to="admin">
+                    <Button className="w-full" type="submit">
+                      DashBoard
+                    </Button>
+                  </Link>
                 </SheetClose>
               </SheetFooter>
             )}
