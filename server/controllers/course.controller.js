@@ -16,9 +16,29 @@ export const createCourse = async (req, res) => {
     });
     return res.status(201).json({ success: true, message: "Course created." });
   } catch (error) {
-    console.error("Error in Course:", error);
+    console.error("Error in Create Course:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error: Create Course",
+    });
+  }
+};
+export const getCreatorCourse = async (req, res) => {
+  try {
+    const userId = req.id;
+    const courses = await Course.find({ creator: userId });
+    if (!courses) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Course Not Found", courses: [] });
+    }
+    return res
+      .status(200)
+      .json({ success: true, message: "Course Found", courses });
+  } catch (error) {
+    console.error("Error in Get Course:", error);
     return res
       .status(500)
-      .json({ success: false, message: "Internal Server Error: Course" });
+      .json({ success: false, message: "Internal Server Error: Get Course" });
   }
 };

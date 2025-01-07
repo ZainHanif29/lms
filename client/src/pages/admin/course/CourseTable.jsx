@@ -10,17 +10,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
+import { useGetCreatorCourseQuery } from "@/features/api/courseApi";
+import { Badge } from "@/components/ui/badge";
+import { Edit } from "lucide-react";
 
 const CourseTable = () => {
   const navigate = useNavigate();
+  const { data, isLoading } = useGetCreatorCourseQuery();
+  if (isLoading) {
+    return (
+      <>
+        <h1>Loading...</h1>
+      </>
+    );
+  }
+  console.log(data);
   return (
     <>
       <div>
-        <Button onClick={() => navigate("create")}>
-          Create a new course
-        </Button>
+        <Button onClick={() => navigate("create")}>Create a new course</Button>
         <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableCaption>A list of your recent courses.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Price</TableHead>
@@ -30,12 +40,26 @@ const CourseTable = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">INV001</TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
+            {data.courses.map((course) => (
+              <TableRow key={course._id}>
+                <TableCell className="font-medium">
+                  {course?.coursePrice || "N/A"}
+                </TableCell>
+                <TableCell>
+                  <Badge>{course?.isPublished ? "Published" : "Draft"}</Badge>
+                </TableCell>
+                <TableCell>{course?.courseTitle}</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => navigate(course._id)}
+                  >
+                    <Edit />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
