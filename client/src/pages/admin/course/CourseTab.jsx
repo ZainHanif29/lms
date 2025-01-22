@@ -16,9 +16,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+  usePublishCourseMutation,
+} from "@/features/api/courseApi";
 import { Loader2 } from "lucide-react";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const CourseTab = () => {
   const [input, setInput] = useState({
@@ -31,9 +37,23 @@ const CourseTab = () => {
     courseThumbnail: "",
   });
   const [previewThumbnail, setPreviewThumbnail] = useState("");
+  const { courseId } = useParams();
   const navigate = useNavigate();
-  const isPublished = true;
-  const isLoading = false;
+
+  // RTK
+  const [editCourse, { data, isLoading, isSuccess, error }] =
+    useEditCourseMutation();
+  const { data: courseByIdData, isLoading: courseByIdIsLoading } =
+    useGetCourseByIdQuery(courseId);
+  const [publishCourse, {}] = usePublishCourseMutation();
+
+  const publishStatusHandler = async (action) => {
+    // console.log(action);
+    const response = await publishCourse({ courseId, query: action });
+    if (response.data) {
+      toast.success()
+    }
+  };
 
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -55,8 +75,47 @@ const CourseTab = () => {
       fileReader.readAsDataURL(file);
     }
   };
-  const updateCourseHandler = () => {
-    console.log(input)
+  const updateCourseHandler = async () => {
+    const formData = new FormData();
+    formData.append("courseTitle", input.courseTitle);
+    formData.append("subTitle", input.subTitle);
+    formData.append("description", input.description);
+    formData.append("category", input.category);
+    formData.append("courseLevel", input.courseLevel);
+    formData.append("coursePrice", input.coursePrice);
+    formData.append("courseThumbnail", input.courseThumbnail);
+    await editCourse({ formData, courseId });
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success(data?.message || "Course update.");
+    }
+    if (error) {
+      toast.error(error?.data?.message || "Failed to update course.");
+    }
+  }, [isSuccess, error]);
+  useEffect(() => {
+    const course = courseByIdData?.course;
+    if (course) {
+      setInput({
+        courseTitle: course.courseTitle,
+        subTitle: course.subTitle,
+        description: course.description,
+        category: course.category,
+        courseLevel: course.courseLevel,
+        coursePrice: course.coursePrice,
+        courseThumbnail: "",
+      });
+    }
+  }, [courseByIdData?.course]);
+  if (courseByIdIsLoading) {
+    return (
+      <>
+        <div className="flex items-center justify-center h-screen">
+          <Loader2 className="h-48 w-48 animate-spin text-blue-900" />
+        </div>
+      </>
+    );
   }
   return (
     <Card>
@@ -68,8 +127,15 @@ const CourseTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button variant="outline">
-            {isPublished ? "Unpublished" : "Published"}
+          <Button
+            variant="outline"
+            onClick={() =>
+              publishStatusHandler(
+                courseByIdData?.course?.isPublished ? "true" : "false"
+              )
+            }
+          >
+            {courseByIdData?.course?.isPublished ? "Unpublished" : "Published"}
           </Button>
           <Button>Remove Course</Button>
         </div>

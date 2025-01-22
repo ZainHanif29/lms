@@ -10,7 +10,7 @@ const EditCourse = () => {
         <h1 className="font-bold text-xl">
           Add detail information regarding course
         </h1>
-        <Link>
+        <Link to="lecture">
           <Button className="hover:text-blue-600" variant="link">
             Go to lecture page
           </Button>

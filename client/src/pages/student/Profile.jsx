@@ -35,13 +35,13 @@ const Profile = () => {
       isSuccess,
     },
   ] = useUpdateUserMutation();
-  useEffect(() => {
-    refetch();
-  });
+  // useEffect(() => {
+  //   // refetch();
+  // });
   useEffect(() => {
     if (isSuccess) {
       refetch();
-      toast.success(data.message || "Profile updated success");
+      toast.success(updateUserData.message || "Profile updated success");
     }
     if (isError) {
       toast.error(error.message || "Profile updated unsuccess");
@@ -79,7 +79,7 @@ const Profile = () => {
             <AvatarImage
               src={user?.photoUrl || "https://github.com/shadcn.png"}
             />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
           </Avatar>
         </div>
         <div>
