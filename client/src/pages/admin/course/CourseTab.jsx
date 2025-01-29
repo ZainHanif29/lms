@@ -43,15 +43,18 @@ const CourseTab = () => {
   // RTK
   const [editCourse, { data, isLoading, isSuccess, error }] =
     useEditCourseMutation();
-  const { data: courseByIdData, isLoading: courseByIdIsLoading } =
-    useGetCourseByIdQuery(courseId);
+  const {
+    data: courseByIdData,
+    isLoading: courseByIdIsLoading,
+    refetch,
+  } = useGetCourseByIdQuery(courseId);
   const [publishCourse, {}] = usePublishCourseMutation();
 
   const publishStatusHandler = async (action) => {
-    // console.log(action);
     const response = await publishCourse({ courseId, query: action });
     if (response.data) {
-      toast.success()
+      refetch();
+      toast.success(response.data.message);
     }
   };
 
@@ -128,10 +131,11 @@ const CourseTab = () => {
         </div>
         <div className="space-x-2">
           <Button
+            disabled={courseByIdData?.course.lectures.length === 0}
             variant="outline"
             onClick={() =>
               publishStatusHandler(
-                courseByIdData?.course?.isPublished ? "true" : "false"
+                courseByIdData?.course?.isPublished ? false : true
               )
             }
           >

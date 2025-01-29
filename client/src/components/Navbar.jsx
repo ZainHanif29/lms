@@ -58,7 +58,11 @@ const DesktopNavbar = ({ logoutHandler, user }) => {
       {/* Logo */}
       <div className="flex items-center gap-2">
         <School size={30} />
-        <h1 className="hidden md:block font-extrabold text-2xl">E-Learning</h1>
+        <Link to="/">
+          <h1 className="hidden md:block font-extrabold text-2xl">
+            E-Learning
+          </h1>
+        </Link>
       </div>
       {/* dark mode & user icons*/}
       <div className="flex items-center gap-8">
@@ -114,7 +118,9 @@ const MobileNavbar = ({ logoutHandler, user }) => {
       <div className="flex md:hidden items-center justify-between px-4 h-full">
         <div className="flex items-center gap-2">
           <School size={30} />
-          <h1 className="text-2xl">E-Learning</h1>
+          <Link to="/">
+            <h1 className="text-2xl">E-Learning</h1>
+          </Link>
         </div>
         <Sheet>
           <SheetTrigger asChild>
