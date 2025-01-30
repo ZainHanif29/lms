@@ -30,6 +30,31 @@ export const createCourse = async (req, res) => {
     });
   }
 };
+export const getPublishedCourse = async (req, res) => {
+  try {
+    const courses = await Course.find({ isPublished: true }).populate({
+      path: "creator",
+      select: "name photoUrl",
+    });
+    if (!courses) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+    return res.status(200).json({
+      courses,
+      success: true,
+      message: "Course Found",
+    });
+  } catch (error) {
+    console.error("Error in Get Published Course:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error: Get Published Course",
+    });
+  }
+};
 export const getCreatorCourse = async (req, res) => {
   console.log("get create course");
   try {
