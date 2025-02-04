@@ -7,7 +7,6 @@ import {
 } from "../utils/cloudinary.js";
 
 export const createCourse = async (req, res) => {
-  console.log("Create Course");
   try {
     const { courseTitle, category } = req.body;
     if (!courseTitle || !category) {
@@ -56,7 +55,6 @@ export const getPublishedCourse = async (req, res) => {
   }
 };
 export const getCreatorCourse = async (req, res) => {
-  console.log("get create course");
   try {
     const userId = req.id;
     const courses = await Course.find({ creator: userId });
@@ -76,7 +74,6 @@ export const getCreatorCourse = async (req, res) => {
   }
 };
 export const editCourse = async (req, res) => {
-  console.log("edit course");
   try {
     const courseId = req.params.courseId;
     const {
@@ -139,7 +136,6 @@ export const editCourse = async (req, res) => {
   }
 };
 export const getCourseById = async (req, res) => {
-  console.log("get course by id");
   try {
     const { courseId } = req.params;
     const course = await Course.findById(courseId);
@@ -160,7 +156,6 @@ export const getCourseById = async (req, res) => {
   }
 };
 export const createLecture = async (req, res) => {
-  console.log("Create Lecture");
   try {
     const { lectureTitle } = req.body;
     const { courseId } = req.params;
@@ -190,7 +185,6 @@ export const createLecture = async (req, res) => {
   }
 };
 export const getCourseLecture = async (req, res) => {
-  console.log("get course lecture");
   try {
     const { courseId } = req.params;
     const course = await Course.findById(courseId).populate("lectures");
@@ -214,7 +208,6 @@ export const getCourseLecture = async (req, res) => {
   }
 };
 export const editLecture = async (req, res) => {
-  console.log("edit lec");
   try {
     const { lectureTitle, videoInfo, isPreviewFree } = req.body;
     const { courseId, lectureId } = req.params;
@@ -254,7 +247,6 @@ export const editLecture = async (req, res) => {
 };
 
 export const removeLecture = async (req, res) => {
-  console.log("remove lec");
   try {
     const { lectureId } = req.params;
     const lecture = await Lecture.findByIdAndDelete(lectureId);
@@ -287,7 +279,6 @@ export const removeLecture = async (req, res) => {
 };
 
 export const getLectureById = async (req, res) => {
-  console.log("lec by id");
   try {
     const { lectureId } = req.params;
     const lecture = await Lecture.findById(lectureId);
@@ -313,7 +304,6 @@ export const getLectureById = async (req, res) => {
 
 export const togglePublishCourse = async (req, res) => {
   try {
-    console.log("togglePublishCourse", req.query.publish);
     const { courseId } = req.params;
     const { publish } = req.query; // true or false
     const course = await Course.findById(courseId);

@@ -193,7 +193,7 @@ const CourseTab = () => {
                   <SelectValue placeholder="Select a Course level" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Basic">Basic</SelectItem>
+                  <SelectItem value="Beginner">Beginner</SelectItem>
                   <SelectItem value="Medium">Medium</SelectItem>
                   <SelectItem value="Advanced">Advanced</SelectItem>
                 </SelectContent>

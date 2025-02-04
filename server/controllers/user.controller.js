@@ -4,7 +4,6 @@ import generateToken from "../utils/generateToken.js";
 import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 
 export const register = async (req, res) => {
-  console.log("register");
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -34,7 +33,6 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  console.log("login");
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -67,7 +65,6 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  console.log("logout");
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out successfully",
@@ -82,7 +79,6 @@ export const logout = async (req, res) => {
 };
 
 export const getUserProfile = async (req, res) => {
-  console.log("getUserProfile");
   try {
     const userID = req.id;
     const user = await User.findById({ _id: userID }).select("-password");
@@ -107,7 +103,6 @@ export const getUserProfile = async (req, res) => {
 };
 
 export const updateProfile = async (req, res) => {
-  console.log("updateProfile");
   try {
     const userId = req.id;
     const { name } = req.body;
