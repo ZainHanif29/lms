@@ -147,7 +147,7 @@ export const getCourseDetailWithPurchaseStatus = async (req, res) => {
       .populate({ path: "lectures" });
 
     const purchased = await CoursePurchase.findOne({ userId, courseId });
-    console.log(purchased);
+    // console.log(purchased);
 
     if (!course) {
       return res.status(404).json({ message: "course not found!" });
