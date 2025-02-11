@@ -92,7 +92,7 @@ const DesktopNavbar = ({ logoutHandler, user }) => {
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Link to="admin">Dashboard</Link>
+                    <Link to="/admin/dashboard">Dashboard</Link>
                   </DropdownMenuItem>
                 </>
               )}
@@ -150,7 +150,7 @@ const MobileNavbar = ({ logoutHandler, user }) => {
             {user?.role == "instructor" && (
               <SheetFooter>
                 <SheetClose asChild>
-                  <Link to="admin">
+                  <Link to="/admin/dashboard">
                     <Button className="w-full" type="submit">
                       DashBoard
                     </Button>
