@@ -23,6 +23,7 @@ import {
   ProtectedRoute,
   PurchaseCourseProtectedRoute,
 } from "./components/ProtectedRoutes";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const App = () => {
   const appRouter = createBrowserRouter([
@@ -129,7 +130,9 @@ const App = () => {
   ]);
   return (
     <>
-      <RouterProvider router={appRouter} />
+      <ThemeProvider>
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
     </>
   );
 };

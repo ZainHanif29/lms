@@ -40,7 +40,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-b-gray-800 border-b-gray-200 top-0 left-0 right-0 duration-300 z-10">
+    <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 top-0 left-0 right-0 duration-300 z-10">
       {/* Desktop Navbar */}
       <DesktopNavbar logoutHandler={logoutHandler} user={user} />
       {/* Mobile Navbar */}
@@ -127,7 +127,7 @@ const MobileNavbar = ({ logoutHandler, user }) => {
             <Button
               size="icon"
               variant="outline"
-              className="rounded-full bg-gray-200 hover:bg-gray-200"
+              className="rounded-full "
             >
               <Menu />
             </Button>
